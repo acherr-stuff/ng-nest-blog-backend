@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import {AuthModule} from "./modules/auth/auth.module";
+//import {ConfigModule} from "@nestjs/config";
 
 @Module({
   imports: [
@@ -22,6 +24,9 @@ import { AppService } from './app.service';
         migrationsDir: 'src/db/migrations',
       },
     }),
+    AuthModule,
+    //ConfigModule.forRoot()
+
   ],
   controllers: [AppController],
   providers: [AppService],
