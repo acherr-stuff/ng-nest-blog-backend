@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { AdminRepository } from "../../admin/service/admin.repository";
-import { Admin } from "../../admin/model/admin";
+import { AdminRepository } from '../../admin/service/admin.repository';
+import { Admin } from '../../admin/model/admin';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private adminRepository: AdminRepository) {
-
-  }
+  constructor(
+    private adminRepository: AdminRepository,
+    private jwtService: JwtService,
+  ) {}
   async validateAdmin(login: string, pass: string): Promise<any> {
     const admin: Admin = await this.adminRepository.findByLogin(login);
 
@@ -16,5 +18,12 @@ export class AuthService {
     }
 
     return null;
+  }
+
+  async login(admin: Admin) {
+    const payload = { id: admin.id };
+    return {
+      accessToken: this.jwtService.sign(payload)
+    }
   }
 }
