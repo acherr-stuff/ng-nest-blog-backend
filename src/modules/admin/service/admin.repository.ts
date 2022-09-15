@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { Admin } from '../model/admin';
+import { Admin } from '../model/admin.entity';
 
 @Injectable()
 export class AdminRepository {
   private readonly admins: Admin[];
   constructor() {
     this.admins = [
-      {
-        id: 1,
-        login: 'admin',
-        password: 'password',
-      },
+      // {
+      //   id: 1,
+      //   login: 'admin',
+      //   passwordHash: 'password',
+      //   nickName: "Kakyojin Noriaki"
+      // },
     ];
   }
 

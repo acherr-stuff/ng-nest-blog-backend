@@ -3,14 +3,20 @@ import { AuthGuard } from "@nestjs/passport";
 import { LocalAuthGuard } from "../guard/local-auth.guard";
 import { AuthService } from "../service/auth.service";
 import { AdminRepository } from "../../admin/service/admin.repository";
+import { Connection, Repository } from "typeorm";
+import { Admin } from "../../admin/model/admin.entity";
 
 @Controller('auth')
 export class AuthController {
 
+  private adminRepository: Repository<Admin>;
+
   constructor(
     private authService: AuthService,
-    private adminRepository: AdminRepository
+   // private adminRepository: AdminRepository,
+    private connection: Connection,
   ) {
+    this.adminRepository = this.connection.getRepository(Admin);
   }
 
   @UseGuards(LocalAuthGuard)
@@ -28,7 +34,7 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   @Post('refresh')
   async refresh(@Request() req) {
-    const admin = await this.adminRepository.find(req.user.id);
+    const admin = await this.adminRepository.findOne(req.user.id);
     return this.authService.login(admin);
   }
 }
